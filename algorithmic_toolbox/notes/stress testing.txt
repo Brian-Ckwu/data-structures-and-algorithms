@@ -1,0 +1,6 @@
+1. Use an infinite loop to generate random test cases
+2. Implement two quite different algorithms for solving the target problem (usually one of the algorithms can be naive/brutal)
+3. Run the test cases on the algorithms
+4. If there are any different answers, print them out and think what may be the cause of the bug
+5. Try to generate the simpliest cases which will illicit the bug, and use the cases to debug the algorithm
+# Note: if there are different answers, the correctness of the algorithms can be one wrong and one correct or two wrong ones
