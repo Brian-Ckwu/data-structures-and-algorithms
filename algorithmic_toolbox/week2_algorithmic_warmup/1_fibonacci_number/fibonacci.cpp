@@ -1,5 +1,8 @@
 #include <iostream>
 #include <cassert>
+#include <functional>
+
+using namespace std;
 
 // The following code calls a naive algorithm for computing a Fibonacci number.
 //
@@ -22,24 +25,48 @@ int fibonacci_naive(int n) {
 }
 
 int fibonacci_fast(int n) {
-    // write your code here
+    // Base cases
+    if (n <= 1) {
+        return n;
+    }
 
-    return 0;
+    // Variables
+    int a = 0;
+    int b = 1;
+    int temp = 0;
+
+    for (int i = 2; i <= n; ++i) {
+        temp = b;
+        b = a + b;
+        a = temp;
+    }
+
+    return b;
 }
 
-void test_solution() {
-    assert(fibonacci_fast(3) == 2);
-    assert(fibonacci_fast(10) == 55);
-    for (int n = 0; n < 20; ++n)
-        assert(fibonacci_fast(n) == fibonacci_naive(n));
+void test_solution(int n_max, function<int (int)> func_naive, function<int (int)> func_fast) {
+    // Manual test
+    assert(func_fast(3) == 2);
+    assert(func_fast(10) == 55);
+
+    // Test if the two algorithms come up with the same solution
+    int res_naive = 0;
+    int res_fast = 0;
+    for (int n = 0; n < n_max; ++n) {
+        res_naive = func_naive(n);
+        res_fast = func_fast(n);
+        cout << "res_naive: " << res_naive << " res_fast: " << res_fast << "\n";
+        assert(res_naive == res_fast);
+        cout << "OK\n";
+    }
 }
 
 int main() {
-    int n = 0;
-    std::cin >> n;
+    // int n = 0;
+    // cin >> n;
 
-    std::cout << fibonacci_naive(n) << '\n';
-    //test_solution();
+    // cout << fibonacci_naive(n) << '\n';
+    test_solution(30, fibonacci_naive, fibonacci_fast);
     //std::cout << fibonacci_fast(n) << '\n';
     return 0;
 }
