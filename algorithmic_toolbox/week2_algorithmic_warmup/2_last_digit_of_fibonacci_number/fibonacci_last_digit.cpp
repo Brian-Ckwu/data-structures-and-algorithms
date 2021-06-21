@@ -64,3 +64,5 @@ int main() {
     int c = get_fibonacci_last_digit_fast(n);
     cout << c << '\n';
 }
+
+// Notebook upload
