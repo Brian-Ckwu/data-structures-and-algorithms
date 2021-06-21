@@ -55,8 +55,8 @@ void stress_test(int n_max, function<int (long long)> func_naive, function<int (
 
 int main() {
 
-    stress_test(30, fibonacci_sum_squares_naive, fibonacci_sum_squares_fast);
-    // long long n = 0;
-    // std::cin >> n;
-    // std::cout << fibonacci_sum_squares_naive(n);
+    // stress_test(30, fibonacci_sum_squares_naive, fibonacci_sum_squares_fast);
+    long long n = 0;
+    std::cin >> n;
+    std::cout << fibonacci_sum_squares_fast(n);
 }
