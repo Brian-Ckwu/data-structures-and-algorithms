@@ -76,3 +76,5 @@ int main() {
   cout << GCDFast(a, b) << endl;
   return 0;
 }
+
+// Notebook upload
