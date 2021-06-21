@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
-using std::vector;
+
+using namespace std;
 
 long long get_fibonacci_partial_sum_naive(long long from, long long to) {
     long long sum = 0;
