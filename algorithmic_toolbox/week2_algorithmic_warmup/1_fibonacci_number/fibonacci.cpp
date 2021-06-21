@@ -62,11 +62,11 @@ void test_solution(int n_max, function<int (int)> func_naive, function<int (int)
 }
 
 int main() {
-    // int n = 0;
-    // cin >> n;
+    int n = 0;
+    cin >> n;
 
     // cout << fibonacci_naive(n) << '\n';
-    test_solution(30, fibonacci_naive, fibonacci_fast);
-    //std::cout << fibonacci_fast(n) << '\n';
+    // test_solution(30, fibonacci_naive, fibonacci_fast);
+    cout << fibonacci_fast(n) << '\n';
     return 0;
 }
