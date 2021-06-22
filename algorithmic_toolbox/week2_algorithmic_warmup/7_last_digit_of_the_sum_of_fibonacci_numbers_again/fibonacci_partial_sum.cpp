@@ -25,23 +25,36 @@ long long get_fibonacci_partial_sum_naive(long long from, long long to) {
     return sum % 10;
 }
 
-long long get_fibonacci_partial_sum_fast(long long from, long long to) {
-    long long sum = 0;
 
-    long long current = 0;
-    long long next  = 1;
-
-    for (long long i = 0; i <= to; ++i) {
-        if (i >= from) {
-            sum = (sum + current) % 10;
-        }
-
-        long long new_current = next;
-        next = (next + current) % 10;
-        current = new_current;
+int fibonacci_sum_fast(long long n) {
+    if (n <= 1) {
+        return n;
     }
 
-    return sum;
+    int presum = 0;
+    int cursum = 1;
+    vector<int> sums = {0, 1};
+
+    int temp = 0;
+    for (long long i = 2; i <= n; ++i) {
+        temp = cursum;
+        cursum = (presum + cursum + 1) % 10;
+        presum = temp;
+        
+        if (presum == 0 && cursum == 0)
+            break;
+        
+        sums.push_back(cursum);
+    }
+
+    return sums[n % sums.size()];
+}
+
+long long get_fibonacci_partial_sum_fast(long long from, long long to) {
+    int sum_before_from = fibonacci_sum_fast(from > 0 ? from - 1 : 0);
+    int total_sum = fibonacci_sum_fast(to);
+
+    return (total_sum + 10 - sum_before_from) % 10;
 }
 
 void stress_test(function<long long (long long, long long)> func_naive, function<long long (long long, long long)> func_fast) {
@@ -65,6 +78,8 @@ void stress_test(function<long long (long long, long long)> func_naive, function
 }
 
 int main() {
+    // stress_test(get_fibonacci_partial_sum_naive, get_fibonacci_partial_sum_fast);
+
     long long from, to;
     std::cin >> from >> to;
     std::cout << get_fibonacci_partial_sum_fast(from, to) << '\n';

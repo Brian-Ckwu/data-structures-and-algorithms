@@ -1,6 +1,7 @@
 #include <iostream>
 #include <functional>
 #include <cassert>
+#include <vector>
 
 using namespace std;
 
@@ -22,24 +23,30 @@ int fibonacci_sum_naive(long long n) {
     return sum % 10;
 }
 
+// 
+
 int fibonacci_sum_fast(long long n) {
     if (n <= 1) {
         return n;
     }
 
-    int pre = 0;
-    int cur = 1;
-    int sum = 1;
+    int presum = 0;
+    int cursum = 1;
+    vector<int> sums = {0, 1};
 
     int temp = 0;
     for (long long i = 2; i <= n; ++i) {
-        temp = cur;
-        cur = (pre + cur) % 10;
-        pre = temp;
-        sum = (sum + cur) % 10;
+        temp = cursum;
+        cursum = (presum + cursum + 1) % 10;
+        presum = temp;
+        
+        if (presum == 0 && cursum == 0)
+            break;
+        
+        sums.push_back(cursum);
     }
 
-    return sum;
+    return sums[n % sums.size()];
 }
 
 void StressTest(long long n_max, function<int (long long)> func_naive,function<int (long long)> func_fast) {
@@ -61,6 +68,8 @@ void StressTest(long long n_max, function<int (long long)> func_naive,function<i
 }
 
 int main() {
+    // StressTest(80, fibonacci_sum_naive, fibonacci_sum_fast);
+
     long long n = 0;
     std::cin >> n;
     std::cout << fibonacci_sum_fast(n);

@@ -24,7 +24,7 @@ long long LCMNaive(int a, int b) {
 }
 
 long long LCMFast(int a, int b) {
-  return (long long) (a * b) / GCDFast(a, b);
+  return (long long) a * b / GCDFast(a, b);
 }
 
 vector<int> GenTestCase() {
