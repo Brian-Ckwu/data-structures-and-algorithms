@@ -53,6 +53,7 @@ void stress_test(int max_ncoins, function<int (int)> func_recur, function<int (i
   assert(func_dp(6) == 2);
   assert(func_dp(8) == 2);
 
+  // Comparing recursive algorithm with DP algorithm
   for (int ncoins = 1; ncoins <= max_ncoins; ++ncoins) {
     assert(func_recur(ncoins) == func_dp(ncoins));
     cout << "#coins: " << ncoins << " " << "OK\n";
