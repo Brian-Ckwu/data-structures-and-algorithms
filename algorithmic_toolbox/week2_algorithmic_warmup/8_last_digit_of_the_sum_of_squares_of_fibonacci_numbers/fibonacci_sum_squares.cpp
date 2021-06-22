@@ -23,6 +23,7 @@ int fibonacci_sum_squares_naive(long long n) {
     return sum % 10;
 }
 
+// There might be a more intuitive way to implement an efficient algorithm
 int fibonacci_sum_squares_fast(long long n) {
     if (n <= 1) {
         return n;
