@@ -9,11 +9,11 @@ struct Item {
   double value;
 };
 
-bool by_wv_ratio(Item x, Item y) {
+bool by_wv_ratio(const Item& x, const Item& y) {
   return (x.value / x.weight) > (y.value / y.weight);
 }
 
-double get_optimal_value(int capacity, vector<int> weights, vector<int> values) {
+double get_optimal_value(int capacity, const vector<int>& weights, const vector<int>& values) {
   // Value to return
   double value = 0.0;
   // Vector of items
@@ -27,7 +27,7 @@ double get_optimal_value(int capacity, vector<int> weights, vector<int> values) 
   sort(items.begin(), items.end(), by_wv_ratio);
 
   // Fill the knapsack from the first item to the last item
-  for (Item item : items) {
+  for (const Item& item : items) {
     if (capacity > item.weight) {
       value += item.value;
       capacity -= item.weight;
