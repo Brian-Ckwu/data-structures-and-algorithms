@@ -6,7 +6,7 @@ using std::cout;
 using std::vector;
 using std::max;
 
-int compute_min_refills(int dist, int tank, vector<int>& stops) {
+int compute_min_refills(int dist, int tank, vector<int> stops) {
     // Variables
     int refill_loc = 0;
     int refills = 0;
