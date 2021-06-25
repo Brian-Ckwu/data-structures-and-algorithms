@@ -6,9 +6,33 @@ using std::cout;
 using std::vector;
 using std::max;
 
-int compute_min_refills(int dist, int tank, vector<int> & stops) {
-    // write your code here
-    return -1;
+int compute_min_refills(int dist, int tank, vector<int>& stops) {
+    // Variables
+    int refill_loc = 0;
+    int refills = 0;
+
+    // Push the destination into the stops
+    stops.push_back(dist);
+
+    // Main loop
+    int i = -1;
+    while (dist - refill_loc > tank) {
+        // Find the farthest reachable gas station
+        while (stops[i + 1] - refill_loc <= tank) {
+            ++i;
+        }
+
+        // If impossible to refill
+        if (i == -1 || stops[i] == refill_loc) {
+            return -1;
+        }
+
+        // Refill
+        refill_loc = stops[i];
+        ++refills;
+    }
+
+    return refills;
 }
 
 
