@@ -20,7 +20,7 @@ int edit_distance(const string& str1, const string& str2) {
 
   // Compute edit distance using DP algorithm
   int in, del, match, mismatch;
-  for (int j = 1; j <= n; ++j) {
+  for (int j = 1; j <= n; ++j) { // Fill the column first. Is it okay to fill the row first? --> Yes.
     for (int i = 1; i <= m; ++i) {
       in = ed[i][j - 1] + 1;
       del = ed[i - 1][j] + 1;
