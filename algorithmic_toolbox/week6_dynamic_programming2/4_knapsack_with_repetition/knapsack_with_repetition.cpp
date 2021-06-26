@@ -25,9 +25,9 @@ int knapsack(int capacity, const vector<int>& weights, const vector<int>& values
 
 int main() {
   // Test the case from the course
-  int capacity = 10;
-  vector<int> weights = {6, 3, 4, 2};
-  vector<int> values = {30, 14, 16, 9};
+  int capacity = 8;
+  vector<int> weights = {1, 3, 4, 5};
+  vector<int> values = {10, 40, 50, 70};
 
   cout << knapsack(capacity, weights, values);
 
