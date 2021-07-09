@@ -160,14 +160,36 @@ class List {
 
   // Time complexity: O(n)
   void erase(int n) {
-    Node* node = head;
-    while (node) {
-      if (node->val == n) {
-        // Delete node
-        return;
-      }
+    if (empty()) {
+      cout << "This is an empty list." << endl;
+      throw "ERROR: EMPTY LIST";
     }
 
+    // not empty, start searching node
+    Node* dummy = new Node(INT_MIN, head);
+    Node* prev = dummy;
+
+    while (prev->next) {
+      Node* node = prev->next;
+      if (node->val == n) {
+        if (node == head) {
+          head = node->next;
+          if (node == tail) {
+            tail = nullptr;
+          }
+          delete node;
+        } else {
+          prev->next = node->next;
+          if (node == tail) {
+            tail = prev;
+          }
+          delete node;
+        }
+        return;
+      }
+
+      prev = prev->next;
+    }
     cout << "There is no such node." << endl;
   }
 
@@ -186,6 +208,11 @@ class List {
   void add_after(int n);
 
   void print_list() {
+    if (empty()) {
+      cout << "This is an empty list." << endl;
+      return;
+    }
+
     Node* node = head;
     while (node) {
       cout << node->val << " ";
@@ -245,18 +272,13 @@ void test_self_list() {
   list.push_front(6);
   list.push_back(8);
   list.print_list();
-  cout << list.find(4) << endl;
-  cout << list.find(8) << endl;
-  cout << list.find(1) << endl;
-  cout << list.find(6) << endl;
-
-  list.pop_front();
-  list.pop_front();
-  list.pop_front();
-  list.pop_front();
-  
-  cout << list.find(8) << endl;
-
+  list.erase(8);
+  cout << list.top_back() << endl;
+  list.erase(4);
+  list.erase(2);
+  list.print_list();
+  list.erase(6);
+  list.print_list();
 }
 
 void test_standard_list() {
