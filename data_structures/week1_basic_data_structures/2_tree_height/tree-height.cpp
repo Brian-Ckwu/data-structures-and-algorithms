@@ -54,7 +54,7 @@ int get_node_height_recur(Node* node) {
   return max_height;
 }
 
-// What is the time complexity?
+// DFS approach: What is the time complexity?
 int get_tree_height_recur(vector<Node>& nodes) {
   for (Node& node : nodes) {
     if (!node.parent) {
@@ -64,6 +64,9 @@ int get_tree_height_recur(vector<Node>& nodes) {
   }
   throw "There is no root.";
 }
+
+// BFS: What is the time complexity?
+int get_tree_height_bfs();
 
 vector<Node> read_nodes_default() {
   ios_base::sync_with_stdio(0);
@@ -171,6 +174,9 @@ int main (int argc, char **argv)
   }
 
 #endif
-  stress_test();
+  // stress_test();
+  vector<Node> nodes = read_nodes_default();
+  int tree_height = get_tree_height_recur(nodes);
+  cout << tree_height;
   return 0;
 }
