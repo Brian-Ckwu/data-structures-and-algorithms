@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <queue>
 #if defined(__unix__) || defined(__APPLE__)
 #include <sys/resource.h>
 #endif
@@ -66,7 +67,44 @@ int get_tree_height_recur(vector<Node>& nodes) {
 }
 
 // BFS: What is the time complexity?
-int get_tree_height_bfs();
+int get_tree_height_bfs(vector<Node>& nodes) {
+  // Find the root
+  Node* root = nullptr;
+  for (Node& node : nodes) {
+    if (!node.parent) {
+      root = &node;
+      break;
+    }
+  }
+
+  if (root == nullptr) {
+    throw "There is no root.";
+  }
+
+  // Start traversing the tree from the root
+  queue<Node*> node_queue;
+  node_queue.push(root);
+  int tree_height = 0;
+
+  Node* level_last = node_queue.back();
+  while (!node_queue.empty()) {
+    Node* node = node_queue.front();
+    node_queue.pop();
+
+    if (!(node->children.empty())) {
+      for (Node* child_node : node->children) {
+        node_queue.push(child_node);
+      }
+    }
+
+    if (node == level_last) {
+      ++tree_height;
+      level_last = node_queue.back();
+    }
+  }
+
+  return tree_height;
+}
 
 vector<Node> read_nodes_default() {
   ios_base::sync_with_stdio(0);
@@ -124,7 +162,7 @@ void stress_test() {
 
     vector<Node> nodes = read_nodes_from_file(ist);
     // int tree_height_naive = get_tree_height_naive(nodes);
-    int tree_height_recur = get_tree_height_recur(nodes);
+    int tree_height_sol = get_tree_height_bfs(nodes);
     // Close case file
     ist.close();
 
@@ -137,12 +175,12 @@ void stress_test() {
     // Output ans
     int tree_height_ans = -1;
     ist >> tree_height_ans;
-    if (tree_height_recur == tree_height_ans) {
-      cout << "Got tree height right: " << tree_height_recur << endl;
+    if (tree_height_sol == tree_height_ans) {
+      cout << "Got tree height right: " << tree_height_sol << endl;
     } else {
       cout << "Got tree height wrong: " << endl;
       cout << "Answer: " << tree_height_ans << endl;
-      cout << "Got: " << tree_height_recur << endl;
+      cout << "Got: " << tree_height_sol << endl;
     }
     cout << endl;
 
@@ -174,9 +212,9 @@ int main (int argc, char **argv)
   }
 
 #endif
-  // stress_test();
-  vector<Node> nodes = read_nodes_default();
-  int tree_height = get_tree_height_recur(nodes);
-  cout << tree_height;
+  stress_test();
+  // vector<Node> nodes = read_nodes_default();
+  // int tree_height = get_tree_height_bfs(nodes);
+  // cout << tree_height;
   return 0;
 }
