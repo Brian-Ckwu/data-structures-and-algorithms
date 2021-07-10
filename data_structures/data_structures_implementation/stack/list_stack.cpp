@@ -1,10 +1,12 @@
 /*
-  Stack implementation using an array
+  Stack implementation using a singly-linked list
 
-  Limitations: fixed maximum size
+  Advantage: no predetermined maximum size -> no waste of allocated memory (as in an array_stack)
+  Overhead: need extra storage for pointers
 */
 
 #include <iostream>
+#include <forward_list>
 #include <string>
 
 using namespace std;
@@ -17,14 +19,12 @@ using namespace std;
 class MyStack {
  public:
   // Constructor
-  MyStack(size_t max_size)
+  MyStack()
     : sz{0},
-      max_sz{max_size} {
-        arr = new int[max_size];
-      }
+      max_sz{list.max_size()} {}
   
   // Destructor
-  ~MyStack() { delete[] arr; }
+  ~MyStack() { list.clear(); }
 
   // Member functions
   void push(int n);
@@ -37,7 +37,7 @@ class MyStack {
   size_t max_size() const { return max_sz; }
 
  private:
-  int* arr;
+  forward_list<int> list;
   size_t sz;
   size_t max_sz;
 };
@@ -48,7 +48,7 @@ void MyStack::push(int n) {
     throw "ERROR";
   }
 
-  arr[sz] = n;
+  list.push_front(n);
   ++sz;
 }
 
@@ -58,7 +58,7 @@ int MyStack::top() {
     throw "ERROR";
   }
 
-  return arr[sz - 1];
+  return list.front();
 }
 
 void MyStack::pop() {
@@ -67,12 +67,13 @@ void MyStack::pop() {
     throw "ERROR";
   }
 
+  list.pop_front();
   --sz;
 }
 
 void test_my_stack() {
   // Create a stack
-  MyStack stack(5);
+  MyStack stack;
 
   // Common messages
   string is_empty = "The stack is empty.";
@@ -118,7 +119,7 @@ void test_my_stack() {
 
   // More testing
   stack.pop();
-  cout << top_elem << stack.top() << endl; // should be 5
+  cout << top_elem << stack.top() << endl; // should be 6 instead 5 as in array_stack.cpp
   stack.push(8);
   cout << top_elem << stack.top() << endl; // should be 8
   cout << cur_size << stack.size() << endl;
