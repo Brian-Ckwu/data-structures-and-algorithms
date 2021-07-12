@@ -38,9 +38,11 @@ class Buffer {
   Response Process(const Request& request) {
     // main implementation code
     // check if we can pop the previous packets
-    if (!finish_time_.empty()) {
-      while (finish_time_.front() <= request.arrival_time) {
+    while (!finish_time_.empty()) {
+      if (finish_time_.front() <= request.arrival_time) {
         finish_time_.pop();
+      } else {
+        break;
       }
     }
 
@@ -167,6 +169,6 @@ int main() {
   vector <Response> responses = ProcessRequests(requests, &buffer);
 
   PrintResponses(responses);
-  
+
   return 0;
 }
