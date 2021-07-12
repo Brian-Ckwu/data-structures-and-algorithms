@@ -1,10 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <map>
 
-using std::cin;
-using std::cout;
-using std::vector;
-using std::max;
+using namespace std;
 
 // O(nm) naive solution
 vector<int> max_sliding_window_naive(const vector<int>& A, int w) {
@@ -19,6 +17,45 @@ vector<int> max_sliding_window_naive(const vector<int>& A, int w) {
     outputs[i] = window_max;
   }
 
+  return outputs;
+}
+
+// O(nlogn) solution?
+vector<int> max_sliding_window_map(const vector<int>& A, int w) {
+  vector<int> outputs;
+  map<int, int> window;
+
+  // initialize the map and add the maximum element into output vector
+  for (int i = 0; i < w; ++i) {
+    int num = A[i];
+    if (window.find(num) == window.end()) { // element not found
+      window[num] = 1;
+    } else {
+      window[num] += 1;
+    }
+  }
+  outputs.push_back(window.rbegin()->first);
+
+  // start sliding the window
+  for (int i = w; i < A.size(); ++i) {
+    int oldn = A[i - w];
+    int newn = A[i];
+
+    // handle old
+    window[oldn] -= 1;
+    if (window[oldn] == 0) {
+      window.erase(oldn);
+    }
+    // handle new
+    if (window.find(newn) == window.end()) {
+      window[newn] = 1;
+    } else {
+      window[newn] += 1;
+    }
+
+    outputs.push_back(window.rbegin()->first);
+  }
+  
   return outputs;
 }
 
@@ -37,7 +74,7 @@ int main() {
   int w = 0;
   cin >> w;
 
-  const vector<int> outputs = max_sliding_window_naive(A, w);
+  const vector<int> outputs = max_sliding_window_map(A, w);
   for (int output: outputs) {
     cout << output << " ";
   }
