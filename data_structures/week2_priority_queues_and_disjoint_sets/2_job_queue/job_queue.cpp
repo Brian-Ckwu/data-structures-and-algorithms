@@ -1,10 +1,27 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <algorithm>
 
-using std::vector;
-using std::cin;
-using std::cout;
+using namespace std;
+
+struct Thread {
+  int index;
+  long long available_time;
+};
+
+class CompareClass {
+ public:
+  bool operator()(const Thread& a, const Thread& b) {
+    if (a.available_time > b.available_time) {
+      return true;
+    } else if (a.available_time == b.available_time) {
+      return a.index > b.index;
+    } else {
+      return false;
+    }
+  }
+};
 
 class JobQueue {
  private:
@@ -47,28 +64,33 @@ class JobQueue {
     }
   }
 
-  // Time complexity:
+  // Time complexity: O(mlogn)
   void AssignJobsFast() {
     assigned_workers_.resize(jobs_.size());
     start_times_.resize(jobs_.size());
-    // Priority queue for storing (thread, available_time) pairs, initialized to (i, 0) for i = 0 to n - 1
-    // Compare function: smaller available time, if the same then smaller thread index
-
-    // for work = 0 to m - 1:
-      // choose the thread with the highest priority (top element); pop the top element
-      // thread = top_element.first
-      // start_time = top_element.second
-      // duration = duration[work]
-      // assigned_workers_[work] = thread
-      // start_times_[work] = start_time
-      // available_time
-      // push the new (thread, available_time) pair
+    // Priority queue for storing Thread(index, available_time) pairs, initialized to (i, 0) for i = 0 to n - 1
+    priority_queue<Thread, vector<Thread>, CompareClass> threads; // Compare function: smaller available time, if the same then smaller thread index
+    for (int i = 0; i < num_workers_; ++i) {
+      Thread th = {i, 0};
+      threads.push(th);
+    }
+    // process jobs
+    for (int i = 0; i < jobs_.size(); ++i) {
+      Thread th = threads.top(); threads.pop(); // O(logn)
+      int index = th.index;
+      long long start_time = th.available_time;
+      int duration = jobs_[i];
+      assigned_workers_[i] = index;
+      start_times_[i] = start_time;
+      Thread new_th = {index, start_time + duration};
+      threads.push(new_th); // O(logn)
+    }
   }
 
  public:
   void Solve() {
     ReadData();
-    AssignJobs();
+    AssignJobsFast();
     WriteResponse();
   }
 };

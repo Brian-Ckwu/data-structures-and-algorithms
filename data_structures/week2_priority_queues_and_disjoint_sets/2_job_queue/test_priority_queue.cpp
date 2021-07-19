@@ -75,8 +75,24 @@ void for_solving_job_queue() {
   }
 }
 
+void test_pushing_threads() {
+  priority_queue<Thread, vector<Thread>, CompareClass> threads;
+  int num_workers_ = 10;
+  for (int i = 0; i < num_workers_; ++i) {
+    Thread th = {i, 0};
+    threads.push(th);
+  }
+
+  // test if the workers is sorted correctly
+  int qsize = threads.size();
+  for (int i = 0; i < qsize; ++i) {
+    Thread top = threads.top(); threads.pop();
+    cout << "(" << top.index << ", " << top.available_time << ")" << " ";    
+  }
+}
+
 int main() {
-  for_solving_job_queue();
+  test_pushing_threads();
 
   return 0;
 }
