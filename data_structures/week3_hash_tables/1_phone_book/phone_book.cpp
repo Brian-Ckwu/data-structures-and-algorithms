@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <list>
 #include <unordered_map>
 
 using namespace std;
@@ -108,7 +109,84 @@ vector<string> process_queries_hash(const vector<Query>& queries) {
   return result;
 }
 
+/*
+  my third solution (using my own "hideous" hash map)
+*/
+class HashNode {
+ public:
+  int key;
+  string value;
+};
+
+class HashMap {
+ public:
+  HashMap(int n)
+    : m{2 * n} {
+      map.resize(2 * n);
+    }
+  
+  void insert(HashNode& node) {
+    int index = hash(node.key, m);
+    list<HashNode>& chain = map[index];
+    for (HashNode& elem : chain) {
+      if (elem.key == node.key) {
+        elem.value = node.value;
+        return;
+      }
+    }
+    chain.push_back(node);
+  }
+
+  string find(int key) {
+    int index = hash(key, m);
+    list<HashNode>& chain = map[index];
+    for (HashNode& elem : chain) {
+      if (elem.key == key) {
+        return elem.value;
+      }
+    }
+    return "not found";
+  }
+
+  void erase(int key) {
+    int index = hash(key, m);
+    list<HashNode>& chain = map[index];
+    list<HashNode>::iterator it = chain.begin();
+    while (it != chain.end()) {
+      if (it->key == key) {
+        chain.erase(it);
+        break;
+      }
+      ++it;
+    }
+  }
+
+ private:
+  vector<list<HashNode>> map;
+  int m;
+  int hash(int key, int m) { return key % m; }; // m == cardinality of the hash function
+};
+
+// third solution
+vector<string> process_queries_myhash(const vector<Query>& queries) {
+  vector<string> result;
+  HashMap phonebook(queries.size());
+
+  for (const Query& q : queries) {
+    if (q.type == "add") {
+      HashNode person = {q.number, q.name};
+      phonebook.insert(person);
+    } else if (q.type == "del") {
+      phonebook.erase(q.number);
+    } else {
+      string res = phonebook.find(q.number);
+      result.push_back(res);
+    }
+  }
+  return result;
+}
+
 int main() {
-  write_responses(process_queries_hash(read_queries()));
+  write_responses(process_queries_myhash(read_queries()));
   return 0;
 }

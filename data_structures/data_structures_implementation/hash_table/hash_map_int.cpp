@@ -53,6 +53,7 @@ class HashMap {
         chain.erase(it);
         break;
       }
+      ++it;
     }
   }
 
