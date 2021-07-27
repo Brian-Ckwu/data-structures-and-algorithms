@@ -29,6 +29,26 @@ int get_majority_element_hash(vector<int>& a) {
   return -1;
 }
 
+// Time complexity: O(nlogn); Space compleixty: O(1)
+int get_majority_element_sort(vector<int>& a) {
+  sort(a.begin(), a.end());
+  int elem = -1;
+  int count = 0;
+  int half_size = a.size() / 2;
+  for (int& i : a) {
+    if (i != elem) {
+      elem = i;
+      count = 1;
+    } else {
+      ++count;
+    }
+    if (count > half_size) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 int main() {
   int n;
   std::cin >> n;
@@ -36,5 +56,5 @@ int main() {
   for (size_t i = 0; i < a.size(); ++i) {
     std::cin >> a[i];
   }
-  std::cout << (get_majority_element_hash(a) != -1) << '\n';
+  std::cout << (get_majority_element_sort(a) != -1) << '\n';
 }
