@@ -5,10 +5,37 @@
 
 using namespace std;
 
-int get_majority_element(vector<int>& a, int left, int right) {
+bool is_major(int elem, vector<int>& a, int left, int right) {
+  int half_size = (right - left) / 2;
+  int count = 0;
+  for (int i = left; i < right; ++i) {
+    if (a[i] == elem) {
+      ++count;
+    }
+  }
+  if (count > half_size)
+    return true;
+  return false;
+}
+
+// Time complexity: O(nlogn)
+int get_majority_element_dnc(vector<int>& a, int left, int right) {
   if (left == right) return -1;
   if (left + 1 == right) return a[left];
-  //write your code here
+  int mid = (left + right) / 2;
+  int lres = get_majority_element_dnc(a, left, mid);
+  int rres = get_majority_element_dnc(a, mid, right);
+  if (lres == rres) { // either -1 == -1 or majority == majority
+    return lres;
+  } else { // one of the half has the majority -> count if the majority > half_size
+    if (lres != -1 && is_major(lres, a, left, right)) {
+      return lres;
+    }
+    if (rres != -1 && is_major(rres, a, left, right)) {
+      return rres;
+    }
+    return -1;
+  }
   return -1;
 }
 
@@ -56,5 +83,5 @@ int main() {
   for (size_t i = 0; i < a.size(); ++i) {
     std::cin >> a[i];
   }
-  std::cout << (get_majority_element_sort(a) != -1) << '\n';
+  std::cout << (get_majority_element_dnc(a, 0, a.size()) != -1) << '\n';
 }
