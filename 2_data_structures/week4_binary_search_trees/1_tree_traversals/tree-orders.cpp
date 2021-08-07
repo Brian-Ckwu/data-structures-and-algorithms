@@ -12,9 +12,9 @@ using std::cout;
 
 class TreeOrders {
   int n;
-  vector <int> key;
-  vector <int> left;
-  vector <int> right;
+  vector<int> key;
+  vector<int> left;
+  vector<int> right;
 
 public:
   void read() {
@@ -27,33 +27,50 @@ public:
     }
   }
 
+  void push_nodes_in_order(vector<int>& result, int index) {
+    if (index == -1)
+      return;
+    push_nodes_in_order(result, left[index]);
+    result.push_back(key[index]);
+    push_nodes_in_order(result, right[index]);
+  }
 
-  vector <int> in_order() {
+  vector<int> in_order() {
     vector<int> result;
-    // Finish the implementation
-    // You may need to add a new recursive method to do that
-
+    push_nodes_in_order(result, 0);
     return result;
   }
 
-  vector <int> pre_order() {
-    vector<int> result;    
-    // Finish the implementation
-    // You may need to add a new recursive method to do that
-    
+  void push_nodes_pre_order(vector<int>& result, int index) {
+    if (index == -1)
+      return;
+    result.push_back(key[index]);
+    push_nodes_pre_order(result, left[index]);
+    push_nodes_pre_order(result, right[index]);
+  }
+
+  vector<int> pre_order() {
+    vector<int> result;
+    push_nodes_pre_order(result, 0);
     return result;
   }
 
-  vector <int> post_order() {
+  void push_nodes_post_order(vector<int>& result, int index) {
+    if (index == -1)
+      return;
+    push_nodes_post_order(result, left[index]);
+    push_nodes_post_order(result, right[index]);
+    result.push_back(key[index]);
+  }
+
+  vector<int> post_order() {
     vector<int> result;
-    // Finish the implementation
-    // You may need to add a new recursive method to do that
-    
+    push_nodes_post_order(result, 0);
     return result;
   }
 };
 
-void print(vector <int> a) {
+void print(vector<int> a) {
   for (size_t i = 0; i < a.size(); i++) {
     if (i > 0) {
       cout << ' ';
