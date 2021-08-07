@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 #include <algorithm>
 #if defined(__unix__) || defined(__APPLE__)
 #include <sys/resource.h>
@@ -9,6 +10,7 @@ using std::vector;
 using std::ios_base;
 using std::cin;
 using std::cout;
+using std::stack;
 
 class TreeOrders {
   int n;
@@ -41,6 +43,22 @@ public:
     return result;
   }
 
+  vector<int> in_order_iter() {
+    vector<int> res;
+    stack<int> nodes;
+    int node = 0;
+    while (node != -1 || !nodes.empty()) {
+      while (node != -1) {
+        nodes.push(node);
+        node = left[node];
+      }
+      node = nodes.top(); nodes.pop();
+      res.push_back(key[node]);
+      node = right[node];
+    }
+    return res;
+  }
+
   void push_nodes_pre_order(vector<int>& result, int index) {
     if (index == -1)
       return;
@@ -55,6 +73,21 @@ public:
     return result;
   }
 
+  vector<int> pre_order_iter() {
+    vector<int> res;
+    stack<int> nodes;
+    int node = 0;
+    while (node != -1 || !nodes.empty()) {
+      while (node != -1) {
+        res.push_back(key[node]);
+        nodes.push(right[node]);
+        node = left[node];
+      }
+      node = nodes.top(); nodes.pop();
+    }
+    return res;
+  }
+
   void push_nodes_post_order(vector<int>& result, int index) {
     if (index == -1)
       return;
@@ -67,6 +100,29 @@ public:
     vector<int> result;
     push_nodes_post_order(result, 0);
     return result;
+  }
+
+  vector<int> post_order_iter() {
+    vector<int> res;
+    stack<int> nodes;
+    int node = 0;
+    int visited_node = -1;
+    while (node != -1 || !nodes.empty()) {
+      while (node != -1) {
+        nodes.push(node);
+        node = left[node];
+      }
+      node = nodes.top();
+      if (right[node] == -1 || right[node] == visited_node) { // crucial step: check if visited
+        res.push_back(key[node]);
+        nodes.pop();
+        visited_node = node;
+        node = -1;
+      } else {
+        node = right[node];
+      }
+    }
+    return res;
   }
 };
 
@@ -84,9 +140,9 @@ int main_with_large_stack_space() {
   ios_base::sync_with_stdio(0);
   TreeOrders t;
   t.read();
-  print(t.in_order());
-  print(t.pre_order());
-  print(t.post_order());
+  print(t.in_order_iter());
+  print(t.pre_order_iter());
+  print(t.post_order_iter());
   return 0;
 }
 
