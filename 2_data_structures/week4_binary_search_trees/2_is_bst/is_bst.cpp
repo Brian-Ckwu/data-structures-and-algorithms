@@ -2,11 +2,13 @@
 #include <iostream>
 #include <climits>
 #include <vector>
+#include <stack>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::vector;
+using std::stack;
 
 struct Node {
   int key;
@@ -38,6 +40,26 @@ bool IsBinarySearchTree(const vector<Node>& tree) {
   return in_order_check(tree, 0, prev, is_valid);
 }
 
+bool IsBinarySearchTreeIter(const vector<Node>& tree) {
+  if (tree.empty())
+    return true;
+  int prev = INT_MIN;
+  stack<int> nodes;
+  int node = 0;
+  while (node != -1 || !nodes.empty()) {
+    while (node != -1) {
+      nodes.push(node);
+      node = tree[node].left;
+    }
+    node = nodes.top(); nodes.pop();
+    if (prev > tree[node].key)
+      return false;
+    prev = tree[node].key;
+    node = tree[node].right;
+  }
+  return true;
+}
+
 int main() {
   int nodes;
   cin >> nodes;
@@ -47,7 +69,7 @@ int main() {
     cin >> key >> left >> right;
     tree.push_back(Node(key, left, right));
   }
-  if (IsBinarySearchTree(tree)) {
+  if (IsBinarySearchTreeIter(tree)) {
     cout << "CORRECT" << endl;
   } else {
     cout << "INCORRECT" << endl;
