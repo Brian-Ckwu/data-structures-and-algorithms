@@ -1,11 +1,13 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <stack>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::vector;
+using std::stack;
 
 struct Node {
   int key;
@@ -17,7 +19,29 @@ struct Node {
 };
 
 bool IsBinarySearchTree(const vector<Node>& tree) {
-  // Implement correct algorithm here
+  if (tree.empty())
+    return true;
+  stack<int> todos;
+  int node = 0;
+  int prev = -1;
+  bool at_right = false;
+  while (node != -1 || !todos.empty()) {
+    while (node != -1) {
+      todos.push(node);
+      node = tree[node].left;
+    }
+    node = todos.top(); todos.pop();
+    if (prev != -1 && ((tree[prev].key > tree[node].key) || (!at_right && tree[prev].key >= tree[node].key))) {
+      return false;
+    }
+    prev = node;
+    node = tree[node].right;
+    if (node != -1) {
+      at_right = true;
+    } else {
+      at_right = false;
+    }
+  }
   return true;
 }
 
