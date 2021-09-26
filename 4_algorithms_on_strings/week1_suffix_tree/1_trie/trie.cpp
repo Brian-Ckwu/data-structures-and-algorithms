@@ -5,6 +5,7 @@ using namespace std;
 typedef map<char, int> edges;
 typedef vector<edges> trie;
 
+// O(|patterns|)
 trie build_trie(vector<string>& patterns) {
   trie t;
   t.resize(1);
