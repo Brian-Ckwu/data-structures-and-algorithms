@@ -86,7 +86,7 @@ void ProcessPivotElement(Matrix& a, Column& b, const Position& pivot_element) {
   }
 }
 
-void MarkPivotElementUsed(const Position &pivot_element, vector<bool>& used_rows, vector<bool>& used_columns) {
+void MarkPivotElementUsed(const Position& pivot_element, vector<bool>& used_rows, vector<bool>& used_columns) {
   used_rows[pivot_element.row] = true;
   used_columns[pivot_element.column] = true;
 }
